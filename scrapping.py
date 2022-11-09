@@ -56,9 +56,13 @@ actions.move_to_element(element).perform()
 
 flights_top = driver.find_elements(By.XPATH, LI_XPATH_TOP)
 flights_bottom = driver.find_elements(By.XPATH, LI_XPATH_BOTTOM)
+
+
+for i in range(3):
+    flight_top = flights_top[i].text
+    flight_bottom = flights_bottom[i].text
+    print('top:\t', [flight_top])
+    print('bottom:\t', [flight_bottom])
 print(len(flights_top))
-for i in flights_top:
-    flight = i.text
-    print([flight])
 print(len(flights_bottom))
 
