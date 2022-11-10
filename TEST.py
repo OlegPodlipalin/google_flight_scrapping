@@ -93,6 +93,7 @@ print(len(li_elements))
 x = str(li_elements[2])
 list_li = x.split()
 id = [y for y in list_li[4].split('"') if len(y)][-1]
+id = [y for y in list_li[4].split('"') if len(y)][-1]
 
 dept_time = li_elements[2].findAll('div', class_="dPzsIb AdWm1c y52p7d")
 print(len(dept_time))

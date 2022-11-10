@@ -24,21 +24,17 @@ def scrape_data(url='https://www.google.com'):  # url should be imported
     driver_actions.move_to_element(driver, LI_CLASS_NAME)
 
     # extend all the flights
-    # driver_actions.extend_all(driver, LI_BUTTON_XPATH_TOP)
-    # driver_actions.extend_all(driver, LI_BUTTON_XPATH_BOTTOM)
+    driver_actions.extend_all(driver, LI_BUTTON_XPATH_TOP)
+    driver_actions.extend_all(driver, LI_BUTTON_XPATH_BOTTOM)
+
     # move up to the very first element
     driver_actions.move_to_element(driver, LI_CLASS_NAME)
     sleep(2)
     soup = BeautifulSoup(driver.page_source, "lxml")
     li_elements = soup.findAll('li', class_="pIav2d")
 
-    flights_top = driver.find_elements(By.XPATH, LI_XPATH_TOP)
-    flights_bottom = driver.find_elements(By.XPATH, LI_XPATH_BOTTOM)
-
-    print(f'Selenium collects {len(flights_top)} + {len(flights_bottom)} flights')
     print(f'BeautifulSoup collects {len(li_elements)} flights')
 
-    driver.quit()
     return soup
 
 
