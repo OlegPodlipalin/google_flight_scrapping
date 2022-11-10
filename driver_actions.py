@@ -29,10 +29,11 @@ def xpath_build(xpath, li_ind=1):
     return xpath[:-ind + 2] + str(li_ind) + xpath[-ind + 3:]
 
 
-def open_all(driver, base_xpath):
+def extend_all(driver, base_xpath):
     n = 1
     while True:
         try:
+            # add a status bar?
             click_object_xpath(driver, base_xpath, n)
             n += 1
         except TimeoutException:
