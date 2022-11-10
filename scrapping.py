@@ -36,7 +36,7 @@ LI_XPATH_BOTTOM = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[
 
 # Run selenium driver and open the URL
 options = Options()
-options.headless = True
+# options.headless = True
 # driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=chrome_options)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.set_window_size(1920, 1080)
@@ -57,12 +57,12 @@ actions.move_to_element(element).perform()
 flights_top = driver.find_elements(By.XPATH, LI_XPATH_TOP)
 flights_bottom = driver.find_elements(By.XPATH, LI_XPATH_BOTTOM)
 
-
 for i in range(3):
     flight_top = flights_top[i].text
-    flight_bottom = flights_bottom[i].text
-    print('top:\t', [flight_top])
-    print('bottom:\t', [flight_bottom])
+    flight_bottom = flights_bottom[-i].text
+    print(f'top {i}:\t', [flight_top])
+    print(f'bottom {-i}:\t', [flight_bottom])
 print(len(flights_top))
 print(len(flights_bottom))
 
+driver.quit()
