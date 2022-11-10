@@ -1,2 +1,4 @@
 .idea/
+__pycache__
 chromedriver_win32/
+small_tests.py
