@@ -104,7 +104,7 @@ get id and departure time (all of them) for li element and create a new dictiona
 
 {id: [{dept_time: <time>, arr_time: <time>, ...}, {dept_time: <time>, arr_time: <time>, ...}, {}, {}, {},  ...]}
 
-d = {"dept_time": "dPzsIb AdWm1c y52p7d"}
+d = {'Arrival hour': 'SWFQlc AdWm1c y52p7d',}
 
 x = str(li_elements[0])
 list_li = x.split()
