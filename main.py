@@ -1,4 +1,4 @@
-from scraping import Scraper
+from scraper import Scraper
 
 DELAY = 5  # import
 SILENT_MODE = False  # import
