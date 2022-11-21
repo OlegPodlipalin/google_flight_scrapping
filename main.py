@@ -1,4 +1,4 @@
-from scraping import Scraper, extend_all
+from scraping import Scraper
 
 DELAY = 5  # import
 SILENT_MODE = False  # import
@@ -12,13 +12,15 @@ def main1(source):
     # source = 'https://www.google.com/travel/flights?q=' \
     #          'Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
     scraper = Scraper(source, SILENT_MODE, DELAY)
-    scraper.click_object_by_class_name(SHOW_MORE_BUTTON)
-    scraper.move_to_element_by_class_name(LI_CLASS_NAME)
-    soup = scraper.souping()
-    amount_total = len(soup.findAll('li', class_=LI_CLASS_NAME))
-    elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]  #, LI_BUTTON_XPATH_BOTTOM]
-    extend_all(scraper, elements_to_be_extended, amount_total, 'Berlin')  # import name of current destination
-    return scraper.souping()
+    # scraper.click_object_by_class_name(SHOW_MORE_BUTTON)
+    # scraper.move_to_element_by_class_name(LI_CLASS_NAME)
+    # soup = scraper.souping()
+    # amount_total = len(soup.findAll('li', class_=LI_CLASS_NAME))
+    # elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]  #, LI_BUTTON_XPATH_BOTTOM]
+    # extend_all(scraper, elements_to_be_extended, amount_total, 'Berlin')  # import name of current destination
+    # return scraper.souping()
+    scraper.run()
+    return scraper.soup
 
 
 if __name__ == '__main__':
