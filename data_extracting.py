@@ -1,4 +1,4 @@
-from main import main1
+from main import main
 from datetime import time
 
 DESTINATIONS = {1: 'PAR',
@@ -116,7 +116,7 @@ def get_co2_emission(flight):
     return co2_emission
 
 
-soup = main1(source)
+soup = main(source)
 li_elements = soup.findAll('li', class_=LI_CLASS_NAME)
 
 li_string = [str(element).split() for element in li_elements]
