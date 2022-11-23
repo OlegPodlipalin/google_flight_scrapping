@@ -1,0 +1,58 @@
+
+Table flights {
+  id int
+  request_id int
+  country_code int
+  departure_time datetime
+  departure_airport_id int
+  arrival_time datetime
+  arrival_airport_id int
+  flight_duration datetime
+  co2_emission int
+  flight_order_in_request int
+  Indexes {
+  (id) [pk]
+  }
+}
+
+Table airports {
+  id int [pk]
+  abbreviation varchar
+  name varchar
+  city varchar
+  Indexes {
+    (id) [pk]
+  }
+}
+
+Table trips {
+  id int [pk]
+  unique_id varchar
+  date_of_scrape datetime
+  price int
+  Indexes {
+    (id) [pk]
+  }
+}
+
+Table facilities {
+  id int [pk]
+  text varchar
+  Indexes {
+    (id) [pk]
+  }
+}
+
+Table flight_facilities {
+  flight_id int [pk]
+  facility_id int
+  Indexes {
+    (flight_id) [pk]
+  }
+}
+
+Ref: flights.request_id > trips.id 
+Ref: flights.arrival_airport_id > airports.id  
+Ref: flights.departure_airport_id > airports.id  
+Ref: flights.id < flight_facilities.flight_id 
+Ref: facilities.id < flight_facilities.facility_id  
