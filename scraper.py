@@ -28,13 +28,18 @@ class Scraper:
         :param silent_mode: option to run chromedriver in silent mode
         :param delay: time in seconds to wait before stopping chromedriver if an element on the page is not available
         """
+        self._driver = None
+        self.soup = None
+        self._amount_elem_to_scrape = 0
+        self._elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]
+        self._destination = 'Berlin'
+
         self._url = url
         self._silent_mode = silent_mode
         self._delay = delay
+
         self._start_driver()
         self._waiter = WebDriverWait(self._driver, self._delay)
-        self._elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]
-        self._destination = 'Berlin'
 
     def _start_driver(self):
         options = Options()
@@ -67,9 +72,10 @@ class Scraper:
     def _souping(self):
         sleep(1)
         self.soup = BeautifulSoup(self._driver.page_source, "lxml")
-        self._amount = len(self.soup.findAll('li', class_=LI_CLASS_NAME))
+        self._amount_elem_to_scrape = len(self.soup.findAll('li', class_=LI_CLASS_NAME))
 
-    def _address_builder(self, xpath, li_ind):
+    @staticmethod
+    def _address_builder(xpath, li_ind):
         ind = xpath[::-1].index('l')
         return xpath[:-ind + 2] + str(li_ind) + xpath[-ind + 3:]
 
@@ -78,10 +84,10 @@ class Scraper:
         self._move_to_element_by_class_name(LI_CLASS_NAME)
         self._souping()
 
-        bar = tqdm(desc=f'{self._destination} destination scraping:', total=self._amount,
+        bar = tqdm(desc=f'{self._destination} destination scraping:', total=self._amount_elem_to_scrape,
                    bar_format="{desc:<10}{percentage:3.0f}%|{bar:50}{r_bar}")
         for base_address in self._elements_to_be_extended:
-            for n in range(1, self._amount + 1):
+            for n in range(1, self._amount_elem_to_scrape + 1):
                 try:
                     self._click_object_by_xpath(self._address_builder(base_address, n))
                     bar.update(1)
