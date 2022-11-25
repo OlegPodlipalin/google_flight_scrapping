@@ -1,18 +1,27 @@
+from functools import partial
+from multiprocessing import Pool
+
+from cli import GetInput
 from parser import Parser
 from scraper import Scraper
+from get_from_library import get_data
 
-DELAY = 5  # import
-SILENT_MODE = False  # import
-SHOW_MORE_BUTTON = 'ZVk93d'  # class name of li object. to be imported for each site
-LI_CLASS_NAME = 'pIav2d'  # class name of the first li object . to be imported for each site
-LI_BUTTON_XPATH_TOP = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[3]/ul/li[1]/div/div[3]/div/div/button'
-LI_BUTTON_XPATH_BOTTOM = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[5]/ul/li[1]/div/div[3]/div/div/button'
+
+def create_urls(user_input):
+    parts = get_data('url_parts')
+    urls = [parts['p1'] + user_input.data[dest] + parts['p2'] + term + parts['p3'] + user_input.args.flight_class +
+            parts['p4'] for dest in user_input.args.dest for term in user_input.args.term]
+    print(urls)
+    return urls
 
 
 def main(source):
-    # source = 'https://www.google.com/travel/flights?q=' \
-    #          'Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
-    scraper = Scraper(source, SILENT_MODE, DELAY)
+    user_input = GetInput()
+    urls = create_urls(user_input)
+    with Pool(4) as pool:
+        scr = partial(Scraper, user_input)
+        pool.map(scr, urls)
+    scraper = Scraper(user_input, url)  #############################################
     scraper.run()
     parser = Parser(scraper.soup)
     parser.run()
@@ -21,6 +30,5 @@ def main(source):
 
 
 if __name__ == '__main__':
-    source = 'https://www.google.com/travel/flights?q=' \
-             'Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
-    main(source)
+    url = 'https://www.google.com/travel/flights?q=Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20%20with%20business%20class%20one-way&curr=EUR'  # %20one%20adult%20one%20children
+    main(url)

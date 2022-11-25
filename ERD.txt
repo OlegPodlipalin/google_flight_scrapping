@@ -1,7 +1,11 @@
+//// -- LEVEL 1
+//// -- Schemas, Tables and References
 
+// Creating tables
+// You can define the tables with full schema names
 Table flights {
   id int
-  request_id int
+  trip_id int
   country_code int
   departure_time datetime
   departure_airport_id int
@@ -9,7 +13,7 @@ Table flights {
   arrival_airport_id int
   flight_duration datetime
   co2_emission int
-  flight_order_in_request int
+  flight_order_in_trip int
   Indexes {
   (id) [pk]
   }
@@ -51,7 +55,7 @@ Table flight_facilities {
   }
 }
 
-Ref: flights.request_id > trips.id 
+Ref: flights.trip_id > trips.id 
 Ref: flights.arrival_airport_id > airports.id  
 Ref: flights.departure_airport_id > airports.id  
 Ref: flights.id < flight_facilities.flight_id 

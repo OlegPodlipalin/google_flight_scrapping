@@ -10,12 +10,12 @@ CHOOSE_YOUR_OPTION = 2  # 1 - Paris, 2 - Berlin, 3 - Amsterdam, 4 - Roma, 5 -Mad
 # CHOOSE_YOUR_OPTION_DAY = not ready yet. the same as with CHOOSE_YOUR_OPTION (destination)
 
 ATTRIB = {'Departure': ['div', 'dPzsIb AdWm1c y52p7d'],
-              'Arrival': ['div', 'SWFQlc AdWm1c y52p7d'],
-              'Flight duration': ['div', 'CQYfx y52p7d'],
-            # 'Connection time': ['div', 'tvtJdb eoY5cb y52p7d'],
-              'Price': ['div', 'YMlIz FpEdX'],
-              'CO2 emission': ['span', 'gI4d6d'],
-              'Facilities': [['ul', 'li'], ['elO9Ce sSHqwe JNp8ff', 'WtSsrd']]}
+          'Arrival': ['div', 'SWFQlc AdWm1c y52p7d'],
+          'Flight duration': ['div', 'CQYfx y52p7d'],
+          # 'Connection time': ['div', 'tvtJdb eoY5cb y52p7d'],
+          'Price': ['div', ['YMlIz FpEdX', 'YMlIz FpEdX jLMuyc']],
+          'CO2 emission': ['span', 'gI4d6d'],
+          'Facilities': [['ul', 'li'], ['elO9Ce sSHqwe JNp8ff', 'WtSsrd']]}
 
 # {'Company': 'Xsgmwe', 'Flight number': 'Xsgmwe QS0io', 'Type of flight': 'J2OpGd sSHqwe'} hard to scrape
 
@@ -66,7 +66,7 @@ class Parser:
             self._flight_airport.append(airport)
 
     def _time_components_checker(self, elements):
-        if elements[1] != 'h':
+        if elements[1][0] != 'h':
             self._current_flight_hours = 0
             self._current_flight_minutes = int(elements[0])
         elif len(elements) < 3:

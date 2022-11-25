@@ -10,16 +10,31 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from cli import GetInput
 
 SHOW_MORE_BUTTON = 'ZVk93d'  # class name of li object. to be imported for each site
 LI_CLASS_NAME = 'pIav2d'  # class name of the first li object . to be imported for each site
-LI_BUTTON_XPATH_TOP = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[3]/ul/li[1]/div/div[3]/div/div/button'
-LI_BUTTON_XPATH_BOTTOM = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[5]/ul/li[1]/div/div[3]/div/div/button'
+LI_BUTTON_1 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[3]/ul/li[1]/div/div[3]/div/div/button'
+LI_BUTTON_2 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[4]/ul/li[1]/div/div[3]/div/div/button'
+LI_BUTTON_3 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[5]/ul/li[1]/div/div[3]/div/div/button'
+LI_BUTTON_4 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[6]/ul/li[1]/div/div[3]/div/div/button'
+
+
+class Driver:
+    def __init__(self, user_input):
+        options = Options()
+        options.headless = user_input.args.silent
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        # if not self._silent_mode:
+        driver.set_window_size(1920, 1080)
+        # driver.get(self._url)
+        self.driver = driver
+        print("the driver is started")
 
 
 class Scraper:
-    def __init__(self, url='https://www.google.com', silent_mode=True, delay=5):
+    def __init__(self, user_input, url='https://www.google.com'):
         """
         Creates an instance of a class Scraper. This object is an instance of chromedriver with several methods to
         navigate on and interact with given webpage for webscraping purposes. Includes method to create a BeautifulSoup
@@ -31,12 +46,12 @@ class Scraper:
         self._driver = None
         self.soup = None
         self._amount_elem_to_scrape = 0
-        self._elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]
+        self._elements_to_be_extended = [LI_BUTTON_1, LI_BUTTON_2, LI_BUTTON_3, LI_BUTTON_4]
         self._destination = 'Berlin'
 
         self._url = url
-        self._silent_mode = silent_mode
-        self._delay = delay
+        self._silent_mode = user_input.args.silent
+        self._delay = user_input.args.wait
 
         self._start_driver()
         self._waiter = WebDriverWait(self._driver, self._delay)
@@ -44,9 +59,10 @@ class Scraper:
     def _start_driver(self):
         options = Options()
         options.headless = self._silent_mode
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        if not self._silent_mode:
-            driver.set_window_size(1920, 1080)
+        # if not self._silent_mode:
+        driver.set_window_size(1920, 1080)
         driver.get(self._url)
         self._driver = driver
         print("the driver is started")
@@ -56,6 +72,7 @@ class Scraper:
         self._waiter.until(EC.element_to_be_clickable((By.CLASS_NAME, address))).click()
 
     def _click_object_by_xpath(self, address):
+        self._move_to_element_by_xpath(address)
         self._waiter.until(EC.presence_of_element_located((By.XPATH, address)))
         self._waiter.until(EC.element_to_be_clickable((By.XPATH, address))).click()
 
@@ -64,10 +81,10 @@ class Scraper:
         actions = ActionChains(self._driver)  # move up to the very first element
         actions.move_to_element(element).perform()
 
-    # def _move_to_element_by_xpath(self, address):
-    #     element = self._waiter.until(EC.presence_of_element_located((By.XPATH, address)))
-    #     actions = ActionChains(self.driver)  # move up to the very first element
-    #     actions.move_to_element(element).perform()
+    def _move_to_element_by_xpath(self, address):
+        element = self._waiter.until(EC.presence_of_element_located((By.XPATH, address)))
+        actions = ActionChains(self._driver)  # move up to the very first element
+        actions.move_to_element(element).perform()
 
     def _souping(self):
         sleep(1)
@@ -84,8 +101,7 @@ class Scraper:
         self._move_to_element_by_class_name(LI_CLASS_NAME)
         self._souping()
 
-        bar = tqdm(desc=f'{self._destination} destination scraping:', total=self._amount_elem_to_scrape,
-                   bar_format="{desc:<10}{percentage:3.0f}%|{bar:50}{r_bar}")
+        bar = tqdm(desc=f'{self._destination} destination scraping', total=self._amount_elem_to_scrape)  # bar_format="{desc:<10}{percentage:3.0f}%|{bar:50}{r_bar}"
         for base_address in self._elements_to_be_extended:
             for n in range(1, self._amount_elem_to_scrape + 1):
                 try:
@@ -98,20 +114,14 @@ class Scraper:
 
 
 def main():
-    # source = 'https://www.google.com/travel/flights?q=' \
-    #          'Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
-    # scraper = Scraper(source, False, DELAY)
-    # scraper.click_object_by_class_name(SHOW_MORE_BUTTON)
-    # scraper.move_to_element_by_class_name(LI_CLASS_NAME)
-    # soup = scraper.souping()
-    # amount_total = len(soup.findAll('li', class_=LI_CLASS_NAME))
-    # elements_to_be_extended = [LI_BUTTON_XPATH_TOP, LI_BUTTON_XPATH_BOTTOM]
-    # extend_all(scraper, elements_to_be_extended, amount_total, 'Berlin')  # import name of current destination
-    # return scraper.souping()
-    pass
+    source = 'https://www.google.com/travel/flights?q=Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20%20with%20business%20class%20one-way&curr=EUR'  # %20one%20adult%20one%20children
+    user_input = GetInput()
+    scraper = Scraper(user_input, source)
+    scraper.run()
+    with open('soup.txt', 'w') as file:
+        file.write(scraper.soup)
 
 
 if __name__ == '__main__':
-    # print(len(main().findAll('li', class_="pIav2d")))
-    pass
+    main()
 
