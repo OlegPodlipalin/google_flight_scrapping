@@ -26,15 +26,13 @@ class Driver:
         options.headless = user_input.args.silent
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        # if not self._silent_mode:
         driver.set_window_size(1920, 1080)
-        # driver.get(self._url)
         self.driver = driver
-        print("the driver is started")
+        self.waiter = WebDriverWait(self.driver, user_input.args.wait)
 
 
 class Scraper:
-    def __init__(self, user_input, url='https://www.google.com'):
+    def __init__(self, driver, url):
         """
         Creates an instance of a class Scraper. This object is an instance of chromedriver with several methods to
         navigate on and interact with given webpage for webscraping purposes. Includes method to create a BeautifulSoup
@@ -43,29 +41,15 @@ class Scraper:
         :param silent_mode: option to run chromedriver in silent mode
         :param delay: time in seconds to wait before stopping chromedriver if an element on the page is not available
         """
-        self._driver = None
+        driver.driver.get(url)
+        self._driver = driver.driver
+        self._waiter = driver.waiter
         self.soup = None
         self._amount_elem_to_scrape = 0
         self._elements_to_be_extended = [LI_BUTTON_1, LI_BUTTON_2, LI_BUTTON_3, LI_BUTTON_4]
-        self._destination = 'Berlin'
+        self._destination = ''
 
-        self._url = url
-        self._silent_mode = user_input.args.silent
-        self._delay = user_input.args.wait
-
-        self._start_driver()
-        self._waiter = WebDriverWait(self._driver, self._delay)
-
-    def _start_driver(self):
-        options = Options()
-        options.headless = self._silent_mode
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        # if not self._silent_mode:
-        driver.set_window_size(1920, 1080)
-        driver.get(self._url)
-        self._driver = driver
-        print("the driver is started")
+        self.run()
 
     def _click_object_by_class_name(self, address):
         self._waiter.until(EC.presence_of_element_located((By.CLASS_NAME, address)))
@@ -124,4 +108,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

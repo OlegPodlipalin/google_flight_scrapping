@@ -1,7 +1,5 @@
 import argparse
 from get_from_library import get_data
-# import json
-# import os
 
 
 class GetInput:
@@ -19,9 +17,6 @@ class GetInput:
         self.args = self.input_parser.parse_args()
 
     def _get_keys_choices(self):
-        # dir_path = os.path.dirname(os.path.abspath(__file__))
-        # path = os.path.join(dir_path, os.path.join('libraries', 'destinations.json'))
-        # with open(path, 'r') as file:
         self.data = get_data('destinations')
         self._dest_k = [k for k in self.data]
         self._dest_ch = [k + ':' + v for k, v in self.data.items()]
@@ -45,4 +40,4 @@ class GetInput:
             '-s', '--silent', action='store_true', help='option to run the script without opening a browser window')
         # self.input_parser.add_argument(
         #     '-j', '--json', action='store_true', help='save data collected in "flights.json" file')
-        self.input_parser.add_argument('-p', '--print', action='store_true', help='print data collected in stdout')
+        # self.input_parser.add_argument('-p', '--print', action='store_true', help='print data collected in stdout')
