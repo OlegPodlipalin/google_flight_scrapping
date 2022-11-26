@@ -1,5 +1,6 @@
 from parser import Parser
 from scraper import Scraper
+from write_to_db import write_flight_to_db
 
 DELAY = 5  # import
 SILENT_MODE = False  # import
@@ -16,6 +17,7 @@ def main(source):
     scraper.run()
     parser = Parser(scraper.soup)
     parser.run()
+    "write_flight_to_db(parser.flights)"
     for ind, flight in enumerate(parser.flights.items()):
         print(ind, '\t', flight)
 
