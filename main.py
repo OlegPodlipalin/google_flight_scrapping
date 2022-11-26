@@ -23,7 +23,7 @@ def scrape(init_data):
     if the_driver is None:
         the_driver = ChromedriverDriver(init_data[0])
         setattr(threadLocal, 'the_driver', the_driver)
-    soup = GoogleFlightsScraper(the_driver, init_data[1])  # unite the driver and scraper and run here the_driver.run(url)
+    soup = GoogleFlightsScraper(the_driver, init_data[1])
     flight = GoogleFlightsParser(soup.soup)
     return flight.flights
 
