@@ -28,10 +28,11 @@ LI_CLASS_NAME = 'pIav2d'
 source = f'https://www.google.com/travel/flights?q=Flights%20to%20{DESTINATIONS[CHOOSE_YOUR_OPTION]}%20from%20TLV%20on%202022-12-20%20through%202022-12-30%20one-way&curr=EUR'
 
 
-class Parser:
+class GoogleFlightsParser:
     def __init__(self, soup):
         self.flights = dict()
         self._li_elements = soup.findAll('li', class_=LI_CLASS_NAME)
+        self.run()
 
     def _get_flight_id(self, element_data):
         element_data_string = str(element_data).split()

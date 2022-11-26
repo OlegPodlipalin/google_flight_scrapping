@@ -1,14 +1,9 @@
+from tqdm import tqdm
 from time import sleep
 from bs4 import BeautifulSoup
-from selenium import webdriver
 from selenium.common import TimeoutException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from tqdm import tqdm
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from cli import GetInput
 
@@ -20,18 +15,7 @@ LI_BUTTON_3 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/d
 LI_BUTTON_4 = '//*[@id="yDmH0d"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[6]/ul/li[1]/div/div[3]/div/div/button'
 
 
-class Driver:
-    def __init__(self, user_input):
-        options = Options()
-        options.headless = user_input.args.silent
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        driver.set_window_size(1920, 1080)
-        self.driver = driver
-        self.waiter = WebDriverWait(self.driver, user_input.args.wait)
-
-
-class Scraper:
+class GoogleFlightsScraper:
     def __init__(self, driver, url):
         """
         Creates an instance of a class Scraper. This object is an instance of chromedriver with several methods to
@@ -49,7 +33,7 @@ class Scraper:
         self._elements_to_be_extended = [LI_BUTTON_1, LI_BUTTON_2, LI_BUTTON_3, LI_BUTTON_4]
         self._destination = ''
 
-        self.run()
+        self._run()
 
     def _click_object_by_class_name(self, address):
         self._waiter.until(EC.presence_of_element_located((By.CLASS_NAME, address)))
@@ -80,7 +64,7 @@ class Scraper:
         ind = xpath[::-1].index('l')
         return xpath[:-ind + 2] + str(li_ind) + xpath[-ind + 3:]
 
-    def run(self):
+    def _run(self):
         self._click_object_by_class_name(SHOW_MORE_BUTTON)
         self._move_to_element_by_class_name(LI_CLASS_NAME)
         self._souping()
@@ -98,10 +82,10 @@ class Scraper:
 
 
 def main():
-    source = 'https://www.google.com/travel/flights?q=Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20%20with%20business%20class%20one-way&curr=EUR'  # %20one%20adult%20one%20children
-    user_input = GetInput()
-    scraper = Scraper(user_input, source)
-    scraper.run()
+    # source = 'https://www.google.com/travel/flights?q=Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20%20with%20business%20class%20one-way&curr=EUR'  # %20one%20adult%20one%20children
+    # user_input = GetInput()
+    # scraper = GoogleFlightsScraper(user_input, source)
+    # scraper._run()
     with open('soup.txt', 'w') as file:
         file.write(scraper.soup)
 
