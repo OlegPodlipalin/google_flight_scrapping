@@ -26,8 +26,6 @@ def create_db_tables():
                                  database='Google_flight',
                                  cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor()
-    print('hiiii')
-    exit()
 
     try:
         cursor.execute("""CREATE TABLE flights (
