@@ -1,10 +1,12 @@
+import gc
 import threading
 from itertools import repeat
 from multiprocessing.pool import ThreadPool as Pool
 from cli import GetInput
-from parser import Parser
-from scraper import Scraper, Driver
-from get_from_library import get_data
+from webpage_tools.driver import ChromedriverDriver
+from webpage_tools.parser import GoogleFlightsParser
+from webpage_tools.scraper import GoogleFlightsScraper
+from libraries.get_from_library import get_data
 
 threadLocal = threading.local()
 
@@ -19,10 +21,11 @@ def create_urls(user_input):
 def scrape(init_data):
     the_driver = getattr(threadLocal, 'the_driver', None)
     if the_driver is None:
-        the_driver = Driver(init_data[0])
+        the_driver = ChromedriverDriver(init_data[0])
         setattr(threadLocal, 'the_driver', the_driver)
-    soup = Scraper(the_driver, init_data[1])
-    return soup.soup
+    soup = GoogleFlightsScraper(the_driver, init_data[1])  # unite the driver and scraper and run here the_driver.run(url)
+    flight = GoogleFlightsParser(soup.soup)
+    return flight.flights
 
 
 def main(source):
@@ -31,12 +34,17 @@ def main(source):
 
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
-        scrapers = pool.map(scrape, scr)
-    for soup in scrapers:
-        parser = Parser(soup)
-        parser.run()
-        for ind, flight in enumerate(parser.flights.items()):
-            print(ind, '\t', flight)
+        flights = pool.map(scrape, scr)
+
+        global threadLocal
+        del threadLocal
+        gc.collect()
+
+        pool.close()
+        pool.join()
+
+    for ind, flight in enumerate(flights):
+        print(ind, '\t', flight.items())
 
 
 if __name__ == '__main__':
