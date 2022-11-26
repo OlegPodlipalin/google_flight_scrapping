@@ -36,12 +36,12 @@ Functions are broken down to files. Each file combines logically connected funct
 | driver_action.py   | extend_all               | tell driver to execute the following - extend object                                                       |
 | driver_action.py   | xpath_build              | tell driver to execute the following - build xpath from object                                             |
 | driver_start.py    | start_driver             | initialize the driver given a specific URL                                                                 |
-| create_DB   | create_DB              | Checks if DB exists, if not creates database                                                                                                                                        |
-| create_DB   | create_db_tables       | Creates db tables     
-
-| write_to_db | write_flight_to_db            | Fill database with flight details                                                                                                                                                    |
-| write_to_db | write_facilities_to_DB         |    Fill database with hotel facilities      
-
+| create_DB           | create_DB                       | Checks if DB exists, if not creates database                                                       |
+| create_DB           | create_db_tables                | Creates db tables     
+  |
+| write_to_db         | write_flight_to_db            | Fill database with flight details                                                                     |                                                                      
+| write_to_db.        | write_facilities_to_DB                   |    Fill database with hotel facilities      
+  | 
 **********MILESTONE 2********** 
 
 ### DB info
