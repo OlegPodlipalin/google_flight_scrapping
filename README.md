@@ -27,20 +27,25 @@ Program made by Oleg Podlipalin and Ruben Adhoute during ITC October 2022 Data S
 ### Functionality of functions
 Functions are broken down to files. Each file combines logically connected functionality.
 
-| *File*             | *Function*               | *What do and return*                                                                                       |
-|--------------------|--------------------------|------------------------------------------------------------------------------------------------------------|
-| data_extracting.py | main                     | Acts as an orchestrator to program functions. Calls different functions to generate driver and scrap data. |
-| scrapping.py       | scrape_data              | Activate driver and running it on the web page                                                             |
-| driver_action.py   | click_object_class_name  | tell driver to execute the following - click on class object                                               |
-| driver_action.py   | click_object_xpath       | tell driver to execute the following - click on xpath object                                               |
-| driver_action.py   | extend_all               | tell driver to execute the following - extend object                                                       |
-| driver_action.py   | xpath_build              | tell driver to execute the following - build xpath from object                                             |
-| driver_start.py    | start_driver             | initialize the driver given a specific URL                                                                 |
-| create_DB   | create_DB              | Checks if DB exists, if not creates database                                                                                                                                        |
-| create_DB   | create_db_tables       | Creates db tables     
+| *File*             | *Function*                                  | *What do and return*                                                                                       |
+|--------------------|---------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| data_extracting.py | main                                        | Acts as an orchestrator to program functions. Calls different functions to generate driver and scrap data. |
+| scrapping.py       | scrape_data                                 | Activate driver and running it on the web page                                                             |
+| driver_action.py   | click_object_class_name                     | tell driver to execute the following - click on class object                                               |
+| driver_action.py   | click_object_xpath                          | tell driver to execute the following - click on xpath object                                               |
+| driver_action.py   | extend_all                                  | tell driver to execute the following - extend object                                                       |
+| driver_action.py   | xpath_build                                 | tell driver to execute the following - build xpath from object                                             |
+| driver_start.py    | start_driver                                | initialize the driver given a specific URL                                                                 |
+| create_DB   | create_DB                                   | Checks if DB exists, if not creates database                                                                                                                                        |
+| create_DB   | create_db_tables                            | Creates db tables
+| write_to_db | write_data_to_db                          |  Preliminary Parsing  from the website data                                                                                                                                                    |
+| write_to_db | write_flight_to_db                      |        Write flight details into DB table flight
 
-| write_to_db | write_flight_to_db            | Fill database with flight details                                                                                                                                                    |
-| write_to_db | write_facilities_to_DB         |    Fill database with hotel facilities      
+| write_to_db | link_facility_to_flight                      |        Link facility to flight
+ 
+| write_to_db | write_trips_to_db                      |   Write trips details into DB Table trips
+| write_to_db | write_facilities_to_db                      |   Write facilities details into DB Table facilities
+     
 
 **********MILESTONE 2********** 
 
@@ -54,14 +59,13 @@ Functions are broken down to files. Each file combines logically connected funct
 |--------------------|--------------------------------------------------|
 | id                 | Flight id (Primary key)                           |
 | trip_id            | Trip id                                            |
-| country_code       | Code of the country                                |
 | departure_time     | Departure time of the flight                       |
 | departure_airport_id | Departure airport id                             |
 | arrival_time         | Arrival time of the flight                       |
 | arrival_airport_id   | Arrival airport id                               |
 | flight_duration     | Flight duration.                                  |
 | c02_emission        | co2 emission of the flight.                       |
-| flight_order_in_trip | Number of searches done in google for each hotel |
+| flight_order_in_trip | Number of flight in reference to trip  |
 
 
 #### Table "facilities"
@@ -87,10 +91,10 @@ Functions are broken down to files. Each file combines logically connected funct
 
 
 #### Table "trips"
-| column_name        | Description                                      |
-|--------------------|--------------------------------------------------|
-| id                 | Trip id (Primary key)                           |
-| unique_id            | Trip id                                            |
-| date_of_scraoe       | Date of the scrapping                            |
-| price                 | Price of the trip                              |
+| column_name    | Description                                      |
+|----------------|--------------------------------------------------|
+| id             | Trip id (Primary key)                           |
+| unique_id      | Trip id                                            |
+| date_of_scrape | Date of the scrapping                            |
+| price          | Price of the trip                              |
 
