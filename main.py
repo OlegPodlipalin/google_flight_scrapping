@@ -7,6 +7,8 @@ from webpage_tools.driver import ChromedriverDriver
 from webpage_tools.parser import GoogleFlightsParser
 from webpage_tools.scraper import GoogleFlightsScraper
 from libraries.get_from_library import get_data
+import write_to_db
+import create_db
 
 threadLocal = threading.local()
 
@@ -25,12 +27,15 @@ def scrape(init_data):
         setattr(threadLocal, 'the_driver', the_driver)
     soup = GoogleFlightsScraper(the_driver, init_data[1])
     flight = GoogleFlightsParser(soup.soup)
-    return flight.flights
+    write_to_db.write_data_to_db(flight.flights)
+    # return flight.flights
 
 
 def main(source):
     user_input = GetInput()
     urls = create_urls(user_input)
+    create_db.create_db()
+    create_db.create_db_tables()
 
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
@@ -43,8 +48,8 @@ def main(source):
         pool.close()
         pool.join()
 
-    for ind, flight in enumerate(flights):
-        print(ind, '\t', flight.items())
+    # for ind, flight in enumerate(flights):
+    #     print(ind, '\t', flight.items())
 
 
 if __name__ == '__main__':
