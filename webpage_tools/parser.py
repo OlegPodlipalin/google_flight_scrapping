@@ -1,13 +1,5 @@
+import re
 from datetime import time
-
-DESTINATIONS = {1: 'PAR',
-                2: 'BER',
-                3: 'AMS',
-                4: 'ROM',
-                5: 'MAD'}
-
-CHOOSE_YOUR_OPTION = 2  # 1 - Paris, 2 - Berlin, 3 - Amsterdam, 4 - Roma, 5 -Madrid
-# CHOOSE_YOUR_OPTION_DAY = not ready yet. the same as with CHOOSE_YOUR_OPTION (destination)
 
 ATTRIB = {'Departure': ['div', 'dPzsIb AdWm1c y52p7d'],
           'Arrival': ['div', 'SWFQlc AdWm1c y52p7d'],
@@ -17,15 +9,8 @@ ATTRIB = {'Departure': ['div', 'dPzsIb AdWm1c y52p7d'],
           'CO2 emission': ['span', 'gI4d6d'],
           'Facilities': [['ul', 'li'], ['elO9Ce sSHqwe JNp8ff', 'WtSsrd']]}
 
-# {'Company': 'Xsgmwe', 'Flight number': 'Xsgmwe QS0io', 'Type of flight': 'J2OpGd sSHqwe'} hard to scrape
-
-SCRAPPED_PARAMETERS = {"dept_time": "dPzsIb AdWm1c y52p7d"}
-
 # to be imported
 LI_CLASS_NAME = 'pIav2d'
-# flights = dict()
-# source to be imported
-source = f'https://www.google.com/travel/flights?q=Flights%20to%20{DESTINATIONS[CHOOSE_YOUR_OPTION]}%20from%20TLV%20on%202022-12-20%20through%202022-12-30%20one-way&curr=EUR'
 
 
 class GoogleFlightsParser:
@@ -107,7 +92,7 @@ class GoogleFlightsParser:
         self._price = None
         for flight_elements in self._current_flight_data:
             if flight_elements:
-                self._price = flight_elements.text  # TODO get integer!!
+                self._price = int(re.sub(r'\D+', '', flight_elements.text))
                 break
 
     def _get_co2_emission(self, element_data, attribute_name):
@@ -139,7 +124,7 @@ class GoogleFlightsParser:
             arrival_info = {'Arrival_hour': self._flight_time} | {'Arrival_airport': self._flight_airport}
 
             self._get_flight_duration(li_element, 'Flight duration')
-            duration_info = {'Flight duration': self._flight_duration}  # TODO: check bugs here
+            duration_info = {'Flight duration': self._flight_duration}
 
             # connection = get_stop_duration(get_element(li_element, 'Connection time'))
             # connection_info = {'Stop duration': connection}
