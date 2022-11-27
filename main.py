@@ -19,7 +19,8 @@ def main(source):
     parser = Parser(scraper.soup)
     parser.run()
     #Create DB
-    create_db()
+    create_db.create_db()
+    create_db.create_db_tables()
     #Inserting data collected from parser to database
     write_to_db.write_data_to_db(parser.flights)
     exit()
@@ -29,5 +30,5 @@ def main(source):
 
 if __name__ == '__main__':
     source = 'https://www.google.com/travel/flights?q=' \
-             'Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
+             'Flights%20to%20Madrid%20from%20TLV%20on%202022-12-25%20through%202022-12-31%20one-way&curr=EUR'
     main(source)

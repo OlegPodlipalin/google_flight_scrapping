@@ -5,7 +5,7 @@ def create_db():
     """Creates DB if it doesn't exist yet"""
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='rootroot',
+                                 password='root',
                                  cursorclass=pymysql.cursors.DictCursor)
     with connection:
         with connection.cursor() as cursor:
@@ -22,7 +22,7 @@ def create_db_tables():
     """Create Tables in DB and Insert values into table facilities"""
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='rootroot',
+                                 password='root',
                                  database='Google_flight',
                                  cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor()
@@ -43,7 +43,6 @@ def create_db_tables():
         cursor.execute("""CREATE TABLE if not exists facilities(
                           id INT PRIMARY KEY AUTO_INCREMENT,
                           text VARCHAR(50))""")
-
 
         cursor.execute("""CREATE TABLE if not exists flights(
                           id INT PRIMARY KEY AUTO_INCREMENT,

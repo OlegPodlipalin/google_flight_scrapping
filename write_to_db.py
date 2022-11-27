@@ -95,7 +95,7 @@ def write_flight_to_db(flight_departure_airport,flight_departure_hour,flight_arr
 
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='rootroot',
+                                 password='root',
                                  database='Google_flight',
                                  cursorclass=pymysql.cursors.DictCursor)
 
@@ -126,6 +126,8 @@ def write_trips_to_db(unique_ids,flight_price):
         #erasing all euros signs from price flight and transforming values to integers
 
         for i,price in enumerate(flight_price):
+            print(price)
+            print(type(price))
             flight_price[i] = int(re.sub(r'\D+','',price))
 
         for i,id in enumerate(unique_ids):
@@ -137,7 +139,7 @@ def write_trips_to_db(unique_ids,flight_price):
 
         connection = pymysql.connect(host='localhost',
                                      user='root',
-                                     password='rootroot',
+                                     password='root',
                                      database='Google_flight',
                                      cursorclass=pymysql.cursors.DictCursor)
 
@@ -163,7 +165,7 @@ def write_facilities_to_db(flight_facilities):
 
     connection = pymysql.connect(host='localhost',
                                  user='root',
-                                 password='rootroot',
+                                 password='root',
                                  database='Google_flight',
                                  cursorclass=pymysql.cursors.DictCursor)
 
