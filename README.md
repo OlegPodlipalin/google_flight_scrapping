@@ -1,10 +1,7 @@
 # Google Flight Scrapper
 ### Data mining project for ITC
 
-<img src="img/ITC_logo.png" width=150></p>
-
-
-**********MILESTONE 1********** 
+**********MILESTONE 2********** 
 
 
 
@@ -46,20 +43,16 @@ The program allows following options:
 |  __driver.py__     | the script to create __chromedriver__ instance  | Contains __Driver__ class. When it is called it creates an independent instance of chromedriver (does not depend on url to scrape). Takes in parameters to set options for driver: run silently, set time delay to _waiter_ instance. |  
 | __scraper.py__     | the script to scrape [Google Flights](https://www.google.com/travel/flights/) search results | Contains __GoogleFlightsScraper__ class. This class takes in a Driver class instance and url to be scrapped as input parameters. This script uses private methods to open and extend all the flights options for particular request. As a result of its work creates a BeautifulSoup object in its __.soup__ proterty.  |  
 |  __parser.py__     | the script to extract data from [Google Flights](https://www.google.com/travel/flights/) HTML code (BeautifulSoup object) | Contains __GoogleFlightsParser__ class. This class takes in a BeautifulSoup object as an input parameter. This script extracts data about every possible flight option and collects it in json-like structure in its __.flights__ property. |  
-| __get_from_library.py__ | the auxiliary script to extract information from libraries | Contains __get_data__ function. This function opens __.json__ file, reads it and returns received content as a result of its execution   |  
-
-| create_DB   | create_DB                                   | Checks if DB exists, if not creates database                                                                                                                                        |
-| create_DB   | create_db_tables                            | Creates db tables
-| write_to_db | write_data_to_db                          |  Preliminary Parsing  from the website data                                                                                                                                                    |
-| write_to_db | write_flight_to_db                      |        Write flight details into DB table flight
-
-| write_to_db | link_facility_to_flight                      |        Link facility to flight
- 
-| write_to_db | write_trips_to_db                      |   Write trips details into DB Table trips
-| write_to_db | write_facilities_to_db                      |   Write facilities details into DB Table facilities
+| __get_from_library.py__ | the auxiliary script to extract information from libraries | Contains __get_data__ function. This function opens __.json__ file, reads it and returns received content as a result of its execution   |          
+| create_DB   | create_DB                                   | Checks if DB exists, if not creates database   |  
+| create_DB   | create_db_tables                            | Creates db tables |  
+| write_to_db | write_data_to_db                            |  Preliminary Parsing  from the website data      |  
+| write_to_db | write_flight_to_db                          |        Write flight details into DB table flight |  
+| write_to_db | link_facility_to_flight                     |        Link facility to flight                   |  
+| write_to_db | write_trips_to_db                      |   Write trips details into DB Table trips              |  
+| write_to_db | write_facilities_to_db                      |   Write facilities details into DB Table facilities|  
      
 
-**********MILESTONE 2********** 
 
 ### DB info
 #### DB ERD
@@ -105,8 +98,7 @@ The program allows following options:
 #### Table "trips"
 | column_name    | Description                                      |
 |----------------|--------------------------------------------------|
-| id             | Trip id (Primary key)                           |
-| unique_id      | Trip id                                            |
+| id             | Trip id (Primary key)                            |
+| unique_id      | Trip id                                          |
 | date_of_scrape | Date of the scrapping                            |
-| price          | Price of the trip                              |
-
+| price          | Price of the trip                                |
