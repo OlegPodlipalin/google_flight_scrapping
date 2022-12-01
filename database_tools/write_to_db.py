@@ -82,7 +82,7 @@ def write_flight_to_db(flight_departure_airport,flight_departure_hour,flight_arr
     flight_counter = 1
 
     for i,data in enumerate(zip(flight_departure_airport,flight_departure_hour,flight_arrival_airport,flight_arrival_hour,flight_duration,flight_co2_emission,flight_facilities)):
-        for j,element in enumerate(zip(data[0],data[1],data[2],data[3],data[4],data[5],data[6])):
+        for j,element in enumerate(zip(data[0],data[1],data[2],data[3],data[4],data[5])): #,data[6]
             element = list(element)
             #query_for_flight_facilities(flight_counter,link_facility_to_flight(element[-1]))
             element.extend([j,i])
@@ -125,10 +125,10 @@ def write_trips_to_db(unique_ids,flight_price):
 
         #erasing all euros signs from price flight and transforming values to integers
 
-        for i,price in enumerate(flight_price):
-            print(price)
-            print(type(price))
-            flight_price[i] = int(re.sub(r'\D+','',price))
+        # for i,price in enumerate(flight_price):
+        #     print(price)
+        #     print(type(price))
+        #     flight_price[i] = int(re.sub(r'\D+','',price))
 
         for i,id in enumerate(unique_ids):
             datas.append((id,scrapping_date,flight_price[i]))

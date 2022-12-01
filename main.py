@@ -7,8 +7,7 @@ from webpage_tools.driver import ChromedriverDriver
 from webpage_tools.parser import GoogleFlightsParser
 from webpage_tools.scraper import GoogleFlightsScraper
 from libraries.get_from_library import get_data
-import write_to_db
-import create_db
+from database_tools import create_db, write_to_db
 
 threadLocal = threading.local()
 

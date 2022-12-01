@@ -53,8 +53,8 @@ def create_db_tables():
                           arrival_airport_id VARCHAR(50),
                           flight_duration TIME,
                           co2_emission VARCHAR(50),
-                          flight_order_in_trip INT,
-                          FOREIGN KEY (trip_id) REFERENCES trips(id))""")
+                          flight_order_in_trip INT)
+                          """)  # , FOREIGN KEY (trip_id) REFERENCES trips(id))
         # FOREIGN
         # KEY(departure_airport_id)
         # REFERENCES
