@@ -26,15 +26,16 @@ def scrape(init_data):
         setattr(threadLocal, 'the_driver', the_driver)
     soup = GoogleFlightsScraper(the_driver, init_data[1])
     flight = GoogleFlightsParser(soup.soup)
-    write_to_db.write_data_to_db(flight.flights)
-    # return flight.flights
+    return flight.flights
 
 
 def main(source):
     user_input = GetInput()
     urls = create_urls(user_input)
-    create_db.create_db()
-    create_db.create_db_tables()
+
+    creator = create_db.Db_Creator()
+    creator.create_db()
+    creator.create_db_tables()
 
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
@@ -46,6 +47,12 @@ def main(source):
 
         pool.close()
         pool.join()
+
+    for flight in flights:
+        writer = write_to_db.DB_Writer(flight)
+        writer.write_flight_to_db()
+        writer.write_facilities_to_db()
+        writer.write_trips_to_db()
 
     # for ind, flight in enumerate(flights):
     #     print(ind, '\t', flight.items())
