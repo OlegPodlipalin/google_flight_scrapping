@@ -2,12 +2,14 @@ import gc
 import threading
 from itertools import repeat
 from multiprocessing.pool import ThreadPool as Pool
+from api import get_airports_codes
 from cli import GetInput
+from database_tools.write_to_db import DBWriter
 from webpage_tools.driver import ChromedriverDriver
 from webpage_tools.parser import GoogleFlightsParser
 from webpage_tools.scraper import GoogleFlightsScraper
 from libraries.get_from_library import get_data
-from database_tools import create_db, write_to_db
+from database_tools import create_db
 
 threadLocal = threading.local()
 
@@ -37,6 +39,8 @@ def main(source):
     creator.create_db()
     creator.create_db_tables()
 
+    # airports = get_airports_codes()
+
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
         flights = pool.map(scrape, scr)
@@ -48,11 +52,10 @@ def main(source):
         pool.close()
         pool.join()
 
+    writer = DBWriter()
     for flight in flights:
-        writer = write_to_db.DB_Writer(flight)
-        writer.write_flight_to_db()
-        writer.write_facilities_to_db()
-        writer.write_trips_to_db()
+        writer.write_from_scrape(flight)
+
 
     # for ind, flight in enumerate(flights):
     #     print(ind, '\t', flight.items())

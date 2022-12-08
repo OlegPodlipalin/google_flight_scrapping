@@ -6,7 +6,7 @@ class Db_Creator:
         # Constructor of the class
         self.connection = pymysql.connect(host='localhost',
                                      user='root',
-                                     password='rootroot',
+                                     password='root',
                                      cursorclass=pymysql.cursors.DictCursor)
         #self.cursor = self.connection.cursor()
 
