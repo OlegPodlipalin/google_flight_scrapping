@@ -13,7 +13,7 @@ Program made by Oleg Podlipalin and Ruben Adhoute during ITC October 2022 Data S
 - Download __*.zip__ archive
 - Unzip it at any suitable folder
 - Install required libraries and packages according to __requirements.txt__
-- __in the database_design in two files (create_db.py & write_to_db.py set user and password for mySQL server__
+- __in the database_design folder in two files (create_db.py & write_to_db.py set user and password for mySQL server)__
 - Run __main.py__ script from command line with your request options (use _main.py -h_ option to see help information about all options)
 - The program allows to scrape multiple destinations/date of a trip
   
