@@ -4,7 +4,7 @@ from itertools import repeat
 from multiprocessing.pool import ThreadPool as Pool
 from api import get_airports_codes
 from cli import GetInput
-from database_tools.write_to_db import DBWriter
+from database_tools.write_to_db import DatabaseWriter
 from webpage_tools.driver import ChromedriverDriver
 from webpage_tools.parser import GoogleFlightsParser
 from webpage_tools.scraper import GoogleFlightsScraper
@@ -39,8 +39,6 @@ def main(source):
     creator.create_db()
     creator.create_db_tables()
 
-    # airports = get_airports_codes()
-
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
         flights = pool.map(scrape, scr)
@@ -52,7 +50,10 @@ def main(source):
         pool.close()
         pool.join()
 
-    writer = DBWriter()
+    writer = DatabaseWriter()
+    airports = get_airports_codes()
+    writer.write_from_api(airports)
+
     for flight in flights:
         writer.write_from_scrape(flight)
 

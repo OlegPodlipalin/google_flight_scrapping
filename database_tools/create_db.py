@@ -41,9 +41,9 @@ class Db_Creator:
                                   price INT)""")
 
                 cursor.execute("""CREATE TABLE if not exists airports (
-                                  id VARCHAR(50) PRIMARY KEY,
+                                  id INT PRIMARY KEY AUTO_INCREMENT,
                                   abbreviation VARCHAR(50),
-                                  name VARCHAR(50),
+                                  name VARCHAR(100),
                                   city VARCHAR(50))""")
 
                 cursor.execute("""CREATE TABLE if not exists facilities(
@@ -54,9 +54,9 @@ class Db_Creator:
                                   id INT PRIMARY KEY AUTO_INCREMENT,
                                   trip_id INT,
                                   departure_time TIME,
-                                  departure_airport_id VARCHAR(50),
+                                  departure_airport_id INT,
                                   arrival_time TIME,
-                                  arrival_airport_id VARCHAR(50),
+                                  arrival_airport_id INT,
                                   flight_duration TIME,
                                   co2_emission VARCHAR(50),
                                   flight_order_in_trip INT)
