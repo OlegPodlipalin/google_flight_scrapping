@@ -35,10 +35,6 @@ def main(source):
     user_input = GetInput()
     urls = create_urls(user_input)
 
-    creator = create_db.Db_Creator()
-    creator.create_db()
-    creator.create_db_tables()
-
     with Pool(4) as pool:
         scr = zip(repeat(user_input), urls)
         flights = pool.map(scrape, scr)
@@ -49,6 +45,10 @@ def main(source):
 
         pool.close()
         pool.join()
+
+    creator = create_db.Db_Creator()
+    creator.create_db()
+    creator.create_db_tables()
 
     writer = DatabaseWriter()
     airports = get_airports_codes()
