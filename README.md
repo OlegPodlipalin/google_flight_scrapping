@@ -1,8 +1,9 @@
 # Google Flight Scrapper
 ### Data mining project for ITC
 
-**********MILESTONE 2********** 
+**********MILESTONE 3********** 
 
+#### API file added according to new requirements - description in file tables below
 
 
 This program parses the [Google Flights](https://www.google.com/travel/flights/), a research engine for finding and booking flights. 
@@ -16,8 +17,8 @@ Program made by Oleg Podlipalin and Ruben Adhoute during ITC October 2022 Data S
 - Run __main.py__ script from command line with your request options (use _main.py -h_ option to see help information about all options)
 - The program allows to scrape multiple destinations/date of a trip
   
-The scraping process is time consuming so make shure you have a cup of coffee :).  
-For your conviniance there are status bars with information about scraping process for all chromedriver instances.  
+The scraping process is time consuming so make sure you have a cup of coffee :).  
+For your convenience there are status bars with information about scraping process for all chromedriver instances.  
 Simultaneously can be run up to four chromedriver instances. If your request include more than four specific trips to be scraped they will be processed in these four inctances in turn.
 
 ```
@@ -51,8 +52,8 @@ The program allows following options:
 | write_to_db | link_facility_to_flight                     |        Link facility to flight                   |  
 | write_to_db | write_trips_to_db                      |   Write trips details into DB Table trips              |  
 | write_to_db | write_facilities_to_db                      |   Write facilities details into DB Table facilities|  
-     
-
+| api        | get_airports_codes                      |   Get the airport iata codes via API|       
+| api        | save_airports_to_json                      |  save the results from api code directly to json file|
 
 ### DB info
 #### DB ERD
@@ -91,7 +92,6 @@ The program allows following options:
 | id                  | Airport id (Primary key)                        |
 | abbrevation         | Abbreviated name of the airport                 |
 | name                | Name of airport                                 |
-| city                | City of the airport                             |
 
 
 
