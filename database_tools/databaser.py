@@ -14,8 +14,8 @@ class DatabaseCreateWrite:
                                           cursorclass=pymysql.cursors.DictCursor)
 
         self._trips_table = []
-        self._flights_table = []
         self._new_airports = []
+        self._flights_table = []
         self._new_facilities = []
         self._update_airports_table = []
         self._flight_facilities_table = []
@@ -67,6 +67,9 @@ class DatabaseCreateWrite:
         for query, data in zip(self._data['executemany_query'][:2], [self._new_airports, self._update_airports_table]):
             self._executemany_query(query, data)
 
+        self._new_airports = []
+        self._update_airports_table = []
+
     def write_from_scrape(self, trips):
         for trip_unique_id, trip_details in trips.items():
             for flight_num_in_trip, flight_details in enumerate(zip(trip_details['Departure_airport'],
@@ -101,87 +104,20 @@ class DatabaseCreateWrite:
             self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price']))
             self._last_trip_number += 1
 
-        for query, data in zip(self._data['executemany_query'][1:], [self._update_airports_table,
-                                                                     self._new_facilities,
-                                                                     self._flight_facilities_table,
-                                                                     self._flights_table,
-                                                                     self._trips_table]):
+        for query, data in zip(self._data['executemany_query'], [self._new_airports,
+                                                                 self._update_airports_table,
+                                                                 self._new_facilities,
+                                                                 self._flight_facilities_table,
+                                                                 self._flights_table,
+                                                                 self._trips_table]):
             self._executemany_query(query, data)
 
-    # def create_db(self):
-    #     """Creates DB if it doesn't exist yet"""
-    #     with self.connection.cursor() as cursor:
-    #         # with self.cursor as cursor:
-    #         cursor.execute(f"""CREATE DATABASE if not exists Google_flight""")
-    #         self.connection.commit()
-    #
-    # def create_db_tables(self):
-    #     """Create Tables in DB and Insert values into table facilities"""
-    #     # connection = pymysql.connect(host='localhost',
-    #     #                              user='root',
-    #     #                              password='rootroot',
-    #     #                              database='Google_flight',
-    #     #                              cursorclass=pymysql.cursors.DictCursor)
-    #     # connection.database()
-    #     # cursor = connection.cursor()
-    #
-    #     # self.connection.database('Google_flight')
-    #
-    #     try:
-    #         with self.connection.cursor() as cursor:
-    #             cursor.execute("""USE Google_flight;""")
-    #
-    #             cursor.execute("""CREATE TABLE if not exists trips(
-    #                               id INT PRIMARY KEY AUTO_INCREMENT,
-    #                               unique_id VARCHAR(50),
-    #                               date_of_scrape DATETIME,
-    #                               price INT)""")
-    #
-    #             cursor.execute("""CREATE TABLE if not exists airports (
-    #                               id INT PRIMARY KEY AUTO_INCREMENT,
-    #                               abbreviation VARCHAR(50),
-    #                               name VARCHAR(100),
-    #                               city VARCHAR(50))""")
-    #
-    #             cursor.execute("""CREATE TABLE if not exists facilities(
-    #                               id INT PRIMARY KEY AUTO_INCREMENT,
-    #                               text VARCHAR(50))""")
-    #
-    #             cursor.execute("""CREATE TABLE if not exists flights(
-    #                               id INT PRIMARY KEY AUTO_INCREMENT,
-    #                               trip_id INT,
-    #                               departure_time TIME,
-    #                               departure_airport_id INT,
-    #                               arrival_time TIME,
-    #                               arrival_airport_id INT,
-    #                               flight_duration TIME,
-    #                               co2_emission VARCHAR(50),
-    #                               flight_order_in_trip INT)
-    #                               """)  # , FOREIGN KEY (trip_id) REFERENCES trips(id))
-    #             # FOREIGN
-    #             # KEY(departure_airport_id)
-    #             # REFERENCES
-    #             # airports(id),
-    #             # FOREIGN
-    #             # KEY(arrival_airport_id)
-    #             # REFERENCES
-    #             # airports(id))
-    #
-    #             cursor.execute("""CREATE TABLE if not exists flight_facilities (
-    #                               flight_id INT,
-    #                               facility_id INT)""")
-    #             # FOREIGN
-    #             # KEY(flight_id)
-    #             # REFERENCES
-    #             # flights(id),
-    #             # FOREIGN
-    #             # KEY(facility_id)
-    #             # REFERENCES
-    #             # facilities(id))
-    #             self.connection.commit()
-    #     except:
-    #         print('Issue with table creation')
-    #         pass
+        self._trips_table = []
+        self._new_airports = []
+        self._flights_table = []
+        self._new_facilities = []
+        self._update_airports_table = []
+        self._flight_facilities_table = []
 
 
 if __name__ == '__main__':
