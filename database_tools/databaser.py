@@ -17,6 +17,7 @@ class DatabaseCreateWrite:
             self._login = dict()
             print('Unable to access database. File db_login is not found'
                   '\n\nProvide your credentials to access the database')
+            logging.info(f'Getting credentials for database access from user')
             for key, message in zip(['host', 'user', 'password'], ['hostname', 'username', 'password']):
                 self._login[key] = input(f'Enter your "mySQL" server {message}:\t')
             save_to_json('db_login', self._login)

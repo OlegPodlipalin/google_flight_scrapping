@@ -107,7 +107,7 @@ def main():
 
 if __name__ == '__main__':
     # url = 'https://www.google.com/travel/flights?q=Flights%20to%20BER%20from%20TLV%20on%202022-12-25%20%20with%20business%20class%20one-way&curr=EUR'  # %20one%20adult%20one%20children
-    # main()
+    main()
     pass
 # TODO: 4. add functionality to print out the flights
 # TODO: 5. add functionality to export flights into .json file
