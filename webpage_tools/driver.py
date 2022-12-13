@@ -8,6 +8,12 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class ChromedriverDriver:
     def __init__(self, user_input):
+        """
+        Creates a new Chromedriver instance. Two parameters may be changed: headless mode (True or False) and timeout
+        parameter for selenium WebDriverWait instance. If headless mode is False, window size will be determined
+        automatically (1920x1080).
+        :param user_input: argparse (GetInput) class object
+        """
         logging.info(f'ChromedriverDriver instance creation...')
         options = Options()
         options.headless = user_input.args.silent
@@ -22,4 +28,8 @@ class ChromedriverDriver:
         logging.info(f'ChromedriverDriver instance created')
 
     def __del__(self):
+        """
+        This method is called when the driver is no longer needed. Finishes the Chromedriver workflow.
+        """
         self.driver.quit()
+        logging.info(f'ChromedriverDriver instance deleted')
