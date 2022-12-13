@@ -1,7 +1,4 @@
 {
-  "user":"root",
-  "password":"root",
-  "host":"localhost",
   "database_name": "Google_flights",
   "execute_query":[
     "CREATE DATABASE if not exists Google_flights;",

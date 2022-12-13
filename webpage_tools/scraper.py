@@ -7,7 +7,7 @@ from selenium.common import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from libraries.get_from_library import get_data
+from libraries.work_with_libraries import get_data
 
 
 class GoogleFlightsScraper:

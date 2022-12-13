@@ -9,7 +9,7 @@ from database_tools.databaser import DatabaseCreateWrite
 from webpage_tools.driver import ChromedriverDriver
 from webpage_tools.parser import GoogleFlightsParser
 from webpage_tools.scraper import GoogleFlightsScraper
-from libraries.get_from_library import get_data
+from libraries.work_with_libraries import get_data
 
 
 threadLocal = threading.local()

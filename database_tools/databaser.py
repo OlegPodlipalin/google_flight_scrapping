@@ -1,7 +1,7 @@
 import pymysql.cursors
 from datetime import date
 from tqdm import tqdm
-from libraries.get_from_library import get_data
+from libraries.work_with_libraries import get_data, save_to_json
 import logging
 
 
@@ -10,10 +10,21 @@ class DatabaseCreateWrite:
 
     def __init__(self):
         logging.info(f'DatabaseCreateWrite instance creation...')
+        try:
+            self._login = get_data('db_login')
+        except FileNotFoundError:
+            logging.info(f'Creating db_login.json library with users credentials for "mySQL" database')
+            self._login = dict()
+            print('Unable to access database. File db_login is not found'
+                  '\n\nProvide your credentials to access the database')
+            for key, message in zip(['host', 'user', 'password'], ['hostname', 'username', 'password']):
+                self._login[key] = input(f'Enter your "mySQL" server {message}:\t')
+            save_to_json('db_login', self._login)
+
         self._data = get_data('databases')
-        self._connection = pymysql.connect(host=self._data['host'],
-                                           user=self._data['user'],
-                                           password=self._data['password'],
+        self._connection = pymysql.connect(host=self._login['host'],
+                                           user=self._login['user'],
+                                           password=self._login['password'],
                                            cursorclass=pymysql.cursors.DictCursor)
         logging.info(f'connection to database created')
 

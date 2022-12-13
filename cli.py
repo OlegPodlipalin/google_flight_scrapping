@@ -1,5 +1,5 @@
 import argparse
-from libraries.get_from_library import get_data
+from libraries.work_with_libraries import get_data
 
 
 class GetInput:

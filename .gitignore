@@ -4,3 +4,4 @@ __pycache__
 chromedriver_win32/
 small_tests.py
 /gfs.log
+/libraries/db_login.json
