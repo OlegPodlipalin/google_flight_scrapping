@@ -1,3 +1,4 @@
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -7,13 +8,18 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class ChromedriverDriver:
     def __init__(self, user_input):
+        logging.info(f'ChromedriverDriver instance creation...')
         options = Options()
         options.headless = user_input.args.silent
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        logging.debug(f'Settings for Chromedriver: headless - {user_input.args.silent}, delay: {user_input.args.wait}')
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        logging.info(f'Chromedriver instance created')
         driver.set_window_size(1920, 1080)
+        logging.debug(f'Chromedriver window size set to 1920x1080')
         self.driver = driver
         self.waiter = WebDriverWait(self.driver, user_input.args.wait)
+        logging.info(f'ChromedriverDriver instance created')
 
     def __del__(self):
         self.driver.quit()
