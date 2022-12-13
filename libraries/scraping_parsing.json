@@ -10,5 +10,6 @@
   "li_class_name": "pIav2d",
   "show_more_button": "ZVk93d",
   "button_head": "//*[@id=\"yDmH0d\"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[",
-  "button_tail": "]/ul/li[1]/div/div[3]/div/div/button"
+  "button_body": "]/ul/li[",
+  "button_tail": "]/div/div[3]/div/div/button"
 }

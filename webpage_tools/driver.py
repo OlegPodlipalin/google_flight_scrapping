@@ -16,9 +16,11 @@ class ChromedriverDriver:
         """
         logging.info(f'ChromedriverDriver instance creation...')
         options = Options()
+        # silent (headless) mode settings applied
         options.headless = user_input.args.silent
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         logging.debug(f'Settings for Chromedriver: headless - {user_input.args.silent}, delay: {user_input.args.wait}')
+        # driver creation. chromedriver is downloaded automatically
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
         logging.info(f'Chromedriver instance created')
         driver.set_window_size(1920, 1080)
