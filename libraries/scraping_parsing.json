@@ -1,0 +1,14 @@
+{
+  "Departure": ["div", "dPzsIb AdWm1c y52p7d"],
+  "Arrival": ["div", "SWFQlc AdWm1c y52p7d"],
+  "Flight duration": ["div", "CQYfx y52p7d"],
+  "Flight number": ["div", "MX5RWe sSHqwe y52p7d"],
+  "Connection time": ["div", "tvtJdb eoY5cb y52p7d"],
+  "Price": ["div", ["YMlIz FpEdX", "YMlIz FpEdX jLMuyc"]],
+  "CO2 emission": ["span", "gI4d6d"],
+  "Facilities": ["ul", "elO9Ce sSHqwe JNp8ff"],
+  "li_class_name": "pIav2d",
+  "show_more_button": "ZVk93d",
+  "button_head": "//*[@id=\"yDmH0d\"]/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[",
+  "button_tail": "]/ul/li[1]/div/div[3]/div/div/button"
+}
