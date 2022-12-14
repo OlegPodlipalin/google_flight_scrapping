@@ -49,7 +49,7 @@ class GoogleFlightsScraper:
         logging.debug(f'Waiting for button "show more" to clickable for {self._webpage}')
         self._waiter.until(EC.presence_of_element_located((By.CLASS_NAME, address)))
         self._waiter.until(EC.element_to_be_clickable((By.CLASS_NAME, address))).click()
-        logging.debug(f'Button "show more" clicked on {self._webpage}')
+        logging.info(f'Button "show more" clicked on {self._webpage}')
 
     def _click_object_by_xpath(self, address):
         """
@@ -145,6 +145,9 @@ class GoogleFlightsScraper:
                     logging.error(f'ElementClickInterceptedException occurred on {self._webpage} second time. '
                                   f'Exception raised')
                     raise ElementClickInterceptedException()
+            else:
+                # if there were no exceptions break loop
+                break
         # collecting information about total number of elements
         self._souping()
         logging.info(f'Number of elements to scrape on {self._webpage}: {self._number_elem_to_scrape}')
