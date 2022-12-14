@@ -1,0 +1,22 @@
+{
+  "database_name": "Google_flights",
+  "execute_query":[
+    "CREATE DATABASE if not exists Google_flights;",
+    "USE Google_flights;",
+    "CREATE TABLE if not exists trips(id INT PRIMARY KEY AUTO_INCREMENT, unique_id VARCHAR(50), date_of_scrape DATE, price INT);",
+    "CREATE TABLE if not exists airports (id INT PRIMARY KEY AUTO_INCREMENT, iata_code VARCHAR(50), name VARCHAR(100), city VARCHAR(50));",
+    "CREATE TABLE if not exists facilities(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(100));",
+    "CREATE TABLE if not exists flights(id INT PRIMARY KEY AUTO_INCREMENT, flight_num VARCHAR(50), depart_time DATETIME, depart_airport_id INT, arr_time DATETIME, arr_airport_id INT, flight_duration TIME, co2_emission VARCHAR(50));",
+    "CREATE TABLE if not exists flights_facilities (flight_id INT, facility_id INT);",
+    "CREATE TABLE if not exists trips_flights (trip_id INT, flight_id INT, order_in_trip INT)"
+    ],
+  "executemany_query": [
+    "INSERT INTO airports (iata_code, name) VALUES (%s, %s);",
+    "UPDATE airports SET name = %s WHERE iata_code = %s;",
+    "INSERT INTO facilities (text) VALUES (%s);",
+    "INSERT INTO flights_facilities (flight_id, facility_id) VALUES (%s, %s);",
+    "INSERT INTO flights (depart_airport_id, arr_airport_id, flight_num, depart_time, arr_time, flight_duration, co2_emission) VALUES (%s, %s, %s, %s, %s, %s, %s);",
+    "INSERT INTO trips_flights (trip_id, flight_id, order_in_trip) VALUES (%s, %s, %s);",
+    "INSERT INTO trips (unique_id, date_of_scrape, price) VALUES (%s, %s, %s);"
+  ]
+}
