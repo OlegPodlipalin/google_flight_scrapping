@@ -1,7 +1,6 @@
-import time
 import logging
 from tqdm import tqdm
-from time import sleep
+from time import sleep, time
 from bs4 import BeautifulSoup
 from selenium.common import TimeoutException
 from selenium.webdriver import ActionChains
@@ -120,7 +119,7 @@ class GoogleFlightsScraper:
         Private method to run the web page scraping algorithm
         """
         logging.debug(f"Start processing {self._webpage}")
-        start = time.time()
+        start = time()
         # opening all options to flight to be shown
         self._click_object_by_class_name(self._data['show_more_button'])
         self._move_to_element_by_class_name(self._data['li_class_name'])
@@ -147,7 +146,7 @@ class GoogleFlightsScraper:
         logging.info(f'All {self._number_elem_to_scrape} elements on {self._webpage} extended')
         # creating BeautifulSoup object
         self._souping()
-        logging.info(f'GoogleFlightsScraper finished to process {self._webpage} in {time.time() - start} seconds')
+        logging.info(f'GoogleFlightsScraper finished to process {self._webpage} in {time() - start} seconds')
 
 
 def main():

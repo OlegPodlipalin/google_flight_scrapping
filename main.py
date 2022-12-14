@@ -1,6 +1,7 @@
 import gc
 import logging
 import threading
+from time import time
 from itertools import repeat
 from multiprocessing.pool import ThreadPool as Pool
 from api import get_airports_codes
@@ -66,10 +67,11 @@ def main():
     reused when number of destination-date options more than 4. As a result 'google_flights' database with scraped
     information will be created. In addition to this API request performs to get airports information.
     """
+    start = time()
     print("Google Flights scraping script started")
     # extracting users input
     user_input = GetInput()
-    logging.info(f'Google_flights scraping script started')
+    logging.info(f'#########################################\nGoogle_flights scraping script started')
     # URLs creation
     urls = create_urls(user_input)
 
@@ -103,6 +105,9 @@ def main():
     for trips in destinations:
         # writing scraped data into database
         database.write_from_scrape(trips)
+
+    logging.info(f'Total time for script execution: {time() - start} seconds')
+    logging.info(f'#########################################\nGoogle_flights scraping script Finished successfully')
 
 
 if __name__ == '__main__':
