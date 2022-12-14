@@ -1,5 +1,7 @@
 import pymysql.cursors
 from datetime import date
+
+from pymysql import OperationalError, ProgrammingError
 from tqdm import tqdm
 from libraries.work_with_libraries import get_data, save_to_json
 import logging
@@ -15,7 +17,7 @@ class DatabaseCreateWrite:
         except FileNotFoundError:
             logging.info(f'Creating db_login.json library with users credentials for "mySQL" database')
             self._login = dict()
-            print('Unable to access database. File db_login is not found'
+            print('Database access issue. File db_login is not found'
                   '\n\nProvide your credentials to access the database')
             logging.info(f'Getting credentials for database access from user')
             for key, message in zip(['host', 'user', 'password'], ['hostname', 'username', 'password']):
@@ -24,11 +26,23 @@ class DatabaseCreateWrite:
 
         self._data = get_data('databases')
         # crushes when invalid credentials are provided!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        self._connection = pymysql.connect(host=self._login['host'],
-                                           user=self._login['user'],
-                                           password=self._login['password'],
-                                           cursorclass=pymysql.cursors.DictCursor)
-        logging.info(f'connection to database created')
+
+        for _ in range(5):
+            try:
+                self._connection = pymysql.connect(host=self._login['host'],
+                                                   user=self._login['user'],
+                                                   password=self._login['password'],
+                                                   cursorclass=pymysql.cursors.DictCursor)
+                self._execute_query(f'SHOW DATABASES;')
+            except OperationalError:
+                print('Database access issue. Credentials are invalid'
+                      '\n\nProvide your credentials to access the database')
+                logging.info(f'Getting credentials for database access from user')
+                for key, message in zip(['host', 'user', 'password'], ['hostname', 'username', 'password']):
+                    self._login[key] = input(f'Enter your "mySQL" server {message}:\t')
+                save_to_json('db_login', self._login)
+
+        logging.info(f'Connection to database created')
 
         self._scrapping_date = date.today()
         self._destination = None
@@ -52,22 +66,22 @@ class DatabaseCreateWrite:
             # crushes when invalid credentials are provided!!!!!!!!!!!!! maybe here
             self._execute_query(f'USE {self._data["database_name"]};')
             self._read_from_table('airports')
-        except pymysql.err.OperationalError:
+        except OperationalError:
             logging.info(f'Database does not exist. Creating database...')
             try:
                 for query in self._data['execute_query']:
                     self._execute_query(query)
-            except pymysql.err.OperationalError:
-                raise pymysql.err.OperationalError('An issue with database creation.')
+            except OperationalError:
+                raise OperationalError('An issue with database creation.')
             else:
                 database = True
-        except pymysql.err.ProgrammingError:
+        except ProgrammingError:
             logging.info(f'Database is empty. Creating tables...')
             try:
                 for query in self._data['execute_query']:
                     self._execute_query(query)
-            except pymysql.err.OperationalError:
-                raise pymysql.err.OperationalError('An issue with tables creation.')
+            except OperationalError:
+                raise OperationalError('An issue with tables creation.')
             else:
                 database = True
         else:
@@ -176,7 +190,7 @@ class DatabaseCreateWrite:
                                                   self._flights_table.get(flight_details[2]),
                                                   flight_num_in_trip))
 
-            self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price']))
+            self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price'], self._destination))
             self._last_trip_number += 1
             bar.update(1)
 
