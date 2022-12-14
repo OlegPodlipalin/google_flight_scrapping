@@ -51,6 +51,7 @@ class DatabaseCreateWrite:
             logging.info(f'Checking to database to exist...')
             # crushes when invalid credentials are provided!!!!!!!!!!!!! maybe here
             self._execute_query(f'USE {self._data["database_name"]};')
+            self._read_from_table('airports')
         except pymysql.err.OperationalError:
             logging.info(f'Database does not exist. Creating database...')
             try:
