@@ -23,6 +23,7 @@ class DatabaseCreateWrite:
             save_to_json('db_login', self._login)
 
         self._data = get_data('databases')
+        # crushes when invalid credentials are provided!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self._connection = pymysql.connect(host=self._login['host'],
                                            user=self._login['user'],
                                            password=self._login['password'],
@@ -48,6 +49,7 @@ class DatabaseCreateWrite:
         database = False
         try:
             logging.info(f'Checking to database to exist...')
+            # crushes when invalid credentials are provided!!!!!!!!!!!!! maybe here
             self._execute_query(f'USE {self._data["database_name"]};')
         except pymysql.err.OperationalError:
             logging.info(f'Database does not exist. Creating database...')
