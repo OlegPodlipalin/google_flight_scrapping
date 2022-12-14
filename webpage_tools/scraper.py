@@ -2,7 +2,7 @@ import logging
 from tqdm import tqdm
 from time import sleep, time
 from bs4 import BeautifulSoup
-from selenium.common import TimeoutException
+from selenium.common import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -120,9 +120,31 @@ class GoogleFlightsScraper:
         """
         logging.debug(f"Start processing {self._webpage}")
         start = time()
-        # opening all options to flight to be shown
-        self._click_object_by_class_name(self._data['show_more_button'])
-        self._move_to_element_by_class_name(self._data['li_class_name'])
+        for loop in range(2):
+            try:
+                # opening all options to flight to be shown
+                self._click_object_by_class_name(self._data['show_more_button'])
+                self._move_to_element_by_class_name(self._data['li_class_name'])
+            except TimeoutException:
+                if loop == 1:
+                    # for the first time try to wait 5 more seconds
+                    logging.warning(f'TimeoutException occurred on {self._webpage}. Waiting extra 5 seconds')
+                    sleep(5)
+                else:
+                    # for the second time stop algorithm
+                    logging.error(f'TimeoutException occurred on {self._webpage} second time. Exception raised')
+                    raise TimeoutException()
+            except ElementClickInterceptedException:
+                if loop == 1:
+                    # for the first time try to wait 5 more seconds
+                    logging.warning(f'ElementClickInterceptedException occurred on {self._webpage}.'
+                                    f' Waiting extra 5 seconds')
+                    sleep(5)
+                else:
+                    # for the second time stop algorithm
+                    logging.error(f'ElementClickInterceptedException occurred on {self._webpage} second time. '
+                                  f'Exception raised')
+                    raise ElementClickInterceptedException()
         # collecting information about total number of elements
         self._souping()
         logging.info(f'Number of elements to scrape on {self._webpage}: {self._number_elem_to_scrape}')

@@ -60,22 +60,28 @@ def scrape(init_data):
             # sending ChromedriverDriver instance and list of URLs into GoogleFlightsScraper
             soup = GoogleFlightsScraper(the_driver, init_data[1])
         except ElementClickInterceptedException:
+            # if element was not clickable
             if loop_num < 3:
+                # there are 3 attempts to get data from webpage
                 logging.warning(f'Element not clickable on {init_data[1].split("%20")[2]} on '
                                 f'{init_data[1].split("%20")[6]}. Attempt {loop_num}')
                 print(f'Issue with getting data from {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
                       f'Trying again...')
             else:
+                # stop trying on this webpage after 3 attempts
                 logging.error(f'Cannot scrape {init_data[1].split("%20")[2]} on '
                               f'{init_data[1].split("%20")[6]}. Element not clickable ({loop_num} attempts)')
                 print(f'Destination {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]} was not scraped')
         except TimeoutException:
+            # if element was not found and waiter time expired
             if loop_num < 3:
+                # if element was not clickable
                 logging.warning(f'Timeout exception while getting {init_data[1].split("%20")[2]} on '
                                 f'{init_data[1].split("%20")[6]}. Attempt {loop_num}')
                 print(f'Issue with getting data from {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
                       f'Trying again...')
             else:
+                # stop trying on this webpage after 3 attempts
                 logging.error(f'Cannot scrape {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
                               f'Timeout exception appeared ({loop_num} attempts)')
                 print(f'Destination {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]} was not scraped')
@@ -83,6 +89,7 @@ def scrape(init_data):
             # sending the result of scraping (BeautifulSoup class object) into GoogleFlightsParser to extract data
             trips = GoogleFlightsParser(soup.soup)
             return trips.trips
+    # return None if there were exceptions while scraping webpage
     return None
 
 
