@@ -4,6 +4,7 @@ import threading
 from time import time
 from itertools import repeat
 from multiprocessing.pool import ThreadPool as Pool
+from selenium.common import TimeoutException, ElementClickInterceptedException
 from api import get_airports_codes
 from cli import GetInput
 from database_tools.databaser import DatabaseCreateWrite
@@ -53,11 +54,36 @@ def scrape(init_data):
         logging.info(f'Chromedriver created and assigned as Thread local attribute')
     else:
         logging.info(f'Chromedriver instance found and assigned as Thread local attribute')
-    # sending ChromedriverDriver instance and list of URLs into GoogleFlightsScraper
-    soup = GoogleFlightsScraper(the_driver, init_data[1])
-    # sending the result of scraping (BeautifulSoup class object) into GoogleFlightsParser to extract data
-    trips = GoogleFlightsParser(soup.soup)
-    return trips.trips
+
+    for loop_num in range(1, 4):
+        try:
+            # sending ChromedriverDriver instance and list of URLs into GoogleFlightsScraper
+            soup = GoogleFlightsScraper(the_driver, init_data[1])
+        except ElementClickInterceptedException:
+            if loop_num < 3:
+                logging.warning(f'Element not clickable on {init_data[1].split("%20")[2]} on '
+                                f'{init_data[1].split("%20")[6]}. Attempt {loop_num}')
+                print(f'Issue with getting data from {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
+                      f'Trying again...')
+            else:
+                logging.error(f'Cannot scrape {init_data[1].split("%20")[2]} on '
+                              f'{init_data[1].split("%20")[6]}. Element not clickable ({loop_num} attempts)')
+                print(f'Destination {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]} was not scraped')
+        except TimeoutException:
+            if loop_num < 3:
+                logging.warning(f'Timeout exception while getting {init_data[1].split("%20")[2]} on '
+                                f'{init_data[1].split("%20")[6]}. Attempt {loop_num}')
+                print(f'Issue with getting data from {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
+                      f'Trying again...')
+            else:
+                logging.error(f'Cannot scrape {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]}. '
+                              f'Timeout exception appeared ({loop_num} attempts)')
+                print(f'Destination {init_data[1].split("%20")[2]} on {init_data[1].split("%20")[6]} was not scraped')
+        else:
+            # sending the result of scraping (BeautifulSoup class object) into GoogleFlightsParser to extract data
+            trips = GoogleFlightsParser(soup.soup)
+            return trips.trips
+    return None
 
 
 def main():
@@ -91,7 +117,6 @@ def main():
 
         pool.close()
         pool.join()
-        print("All data collected and ready to be written into database")
 
     logging.info(f'All the information from ThreadPool joined together and available for next processing')
     # DatabaseCreateWrite instance creation, on this stage 'google_flights' database is created if it does not exist
@@ -103,8 +128,9 @@ def main():
 
     # since multiprocessing implemented dictionaries of trips collected into destinations variable
     for trips in destinations:
-        # writing scraped data into database
-        database.write_from_scrape(trips)
+        if trips is not None:
+            # writing scraped data into database
+            database.write_from_scrape(trips)
 
     logging.info(f'Total time for script execution: {time() - start} seconds')
     logging.info(f'#########################################\nGoogle_flights scraping script Finished successfully')
