@@ -29,9 +29,9 @@ class ChromedriverDriver:
         self.waiter = WebDriverWait(self.driver, user_input.args.wait)
         logging.info(f'ChromedriverDriver instance created')
 
-    # def __del__(self):
-    #     """
-    #     This method is called when the driver is no longer needed. Finishes the Chromedriver workflow.
-    #     """
-    #     self.driver.quit()
-    #     logging.info(f'ChromedriverDriver instance deleted')
+    def __del__(self):
+        """
+        This method is called when the driver is no longer needed. Finishes the Chromedriver workflow.
+        """
+        self.driver.quit()
+        logging.info(f'ChromedriverDriver instance deleted')

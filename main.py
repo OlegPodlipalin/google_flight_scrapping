@@ -83,8 +83,8 @@ def main():
         destinations = pool.map(scrape, scr)
 
         # memory cleaning and finishing multiprocessing.
-        # global threadLocal
-        # del threadLocal
+        global threadLocal
+        del threadLocal
         gc.collect()
 
         pool.close()

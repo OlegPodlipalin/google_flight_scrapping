@@ -1,8 +1,8 @@
 {
-  "database_name": "Google_flights",
+  "database_name": "ruben_oleg",
   "execute_query":[
-    "CREATE DATABASE if not exists Google_flights;",
-    "USE Google_flights;",
+    "CREATE DATABASE if not exists ruben_oleg;",
+    "USE ruben_oleg;",
     "CREATE TABLE if not exists trips(id INT PRIMARY KEY AUTO_INCREMENT, unique_id VARCHAR(50), date_of_scrape DATE, price INT);",
     "CREATE TABLE if not exists airports (id INT PRIMARY KEY AUTO_INCREMENT, iata_code VARCHAR(50), name VARCHAR(100), city VARCHAR(50));",
     "CREATE TABLE if not exists facilities(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(100));",
