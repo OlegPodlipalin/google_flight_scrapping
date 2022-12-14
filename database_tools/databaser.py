@@ -60,6 +60,15 @@ class DatabaseCreateWrite:
                 raise pymysql.err.OperationalError('An issue with database creation.')
             else:
                 database = True
+        except pymysql.err.ProgrammingError:
+            logging.info(f'Database is empty. Creating tables...')
+            try:
+                for query in self._data['execute_query']:
+                    self._execute_query(query)
+            except pymysql.err.OperationalError:
+                raise pymysql.err.OperationalError('An issue with tables creation.')
+            else:
+                database = True
         else:
             database = True
 
