@@ -190,7 +190,8 @@ class DatabaseCreateWrite:
                                                   self._flights_table.get(flight_details[2]),
                                                   flight_num_in_trip))
 
-            self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price'], self._destination))
+            self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price'],
+                                      self._destination.split()[0]))
             self._last_trip_number += 1
             bar.update(1)
 
