@@ -63,6 +63,9 @@ class GoogleFlightsParser:
         # extracting arrival and departure data for individual flights inside a trip
         current_trip_data = element_data.findAll(self._data[attribute_name][0], class_=self._data[attribute_name][1])
 
+        self._flight_time = []
+        self._flight_airport = []
+
         for flight_elements in current_trip_data:
             # parsing information about one flight
             if not flight_elements:
@@ -96,7 +99,7 @@ class GoogleFlightsParser:
             minutes = int(hours_minutes[1])
 
             # filling trip containers with flight information. flight time in datetime.datetime format
-            self._flight_time.append(datetime(year, month, day, hours, minutes))
+            self._flight_time.append((date(year, month, day), time(hours, minutes)))
             self._flight_airport.append(airport)
 
     def _get_flight_duration(self, element_data, attribute_name):

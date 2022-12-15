@@ -155,10 +155,10 @@ class DatabaseCreateWrite:
             for flight_num_in_trip, flight_details in enumerate(zip(trip_details['Departure_airport'],
                                                                     trip_details['Arrival_airport'],
                                                                     trip_details['Flight_number'],
-                                                                    trip_details['Departure_hour'],
-                                                                    trip_details['Arrival_hour'],
                                                                     trip_details['Flight_duration'],
                                                                     trip_details['CO2 emission'],
+                                                                    trip_details['Departure_hour'],
+                                                                    trip_details['Arrival_hour'],
                                                                     trip_details['Facilities'])):
 
                 if self._flights_table.get(flight_details[2]) is None:
@@ -175,7 +175,8 @@ class DatabaseCreateWrite:
                     arrival_airport_id = self._airports_table.get(flight_details[1])[0]
 
                     flight_details_flight_table = [departure_airport_id, arrival_airport_id]
-                    flight_details_flight_table.extend(list(flight_details[2:-1]))
+                    flight_details_flight_table.extend(list(flight_details[2:5]))
+                    flight_details_flight_table.extend([flight_details[5][1], flight_details[6][1]])
                     self._new_flights.append(flight_details_flight_table)
 
                     for facility in flight_details[-1]:
@@ -188,7 +189,7 @@ class DatabaseCreateWrite:
 
                 self._trips_flights_table.append((self._last_trip_number,
                                                   self._flights_table.get(flight_details[2]),
-                                                  flight_num_in_trip))
+                                                  flight_num_in_trip, flight_details[5][0], flight_details[6][0]))
 
             self._trips_table.append((trip_unique_id, self._scrapping_date, trip_details['Price'],
                                       self._destination.split()[0]))
