@@ -23,6 +23,7 @@ CREATE TABLE `trips` (
   `unique_id` varchar(255),
   `date_of_scrape` date,
   `price` int,
+  `destination` varchar(255),
   PRIMARY KEY (`id`)
 );
 

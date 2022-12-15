@@ -32,6 +32,7 @@ Table trips {
   unique_id varchar
   date_of_scrape date
   price int
+  destination varchar
   Indexes {
     (id) [pk]
   }
